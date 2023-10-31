@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    container_name: farmaze-backend-api  # Set the container name here
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
+      DB_PORT: 5432
+    depends_on:
+      - db
+    networks:
+      - farmaze_backend_default
+
+  db:
+    image: postgres:latest
+    container_name: farmaze-backend-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    networks:
+      - farmaze_backend_default
+    volumes:
+      - ./db/data:/db/data
+
+networks:
+  farmaze_backend_default:
+    driver: bridge

@@ -1,0 +1,16 @@
+id,name,price,description,available_quantity,category
+19f83d06-ae67-4a7c-82e1-f89e84a57f00,Carrot,1.5,Fresh carrot,100,vegetable
+d7a8e92b-b41e-42f2-8f71-2dd7a6767464,Apple,2.0,Crisp apple,50,fruit
+8ce4cfc2-9361-4b44-a42a-47d0da7f82ff,Banana,1.8,Sweet banana,60,fruit
+d85682c3-3cda-408e-9f16-392139cacc33,Broccoli,1.7,Healthy broccoli,80,vegetable
+a3e4ccbf-6a89-4f65-a789-8695f1cbe1ee,Orange,2.2,Juicy orange,45,fruit
+5c6f3ea6-b303-42b5-9bea-6df63e4c3a4c,Spinach,1.6,Fresh spinach,90,vegetable
+3ff44109-eec7-45d3-84f5-6841c733c712,Potato,1.4,Starchy potato,120,vegetable
+5e090a38-0525-47c3-8a09-4d0bfb5e6c63,Grapes,2.5,Sweet grapes,40,fruit
+60e9b9f4-b6bb-4587-8e63-1fc0d1040d1c,Mango,2.8,Delicious mango,35,fruit
+24e6b65f-079c-40e7-8c3a-1172e37268ef,Onion,1.3,Cooking onion,110,vegetable
+64c1cb1c-b8e7-4d2a-bf67-0fc5a261c264,Cucumber,1.8,Crisp cucumber,70,vegetable
+d42bebf3-29a0-4f6a-bf67-0fc5a261c264,Strawberry,2.3,Sweet strawberry,55,fruit
+2e4ac5dd-7f69-4a7c-9e41-e8e6070d9de7,Avocado,2.7,Creamy avocado,30,fruit
+d011c1d6-cb21-495a-b5d3-e5e7c678dcd8,Cherry,2.4,Sweet cherry,65,fruit
+a6a2954d-5d9f-45d6-a8a3-929df89929a8,Olive Oil,5.0,Premium olive oil,25,oil
