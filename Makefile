@@ -28,5 +28,7 @@ import-b2bclients:
 	docker exec -i farmaze-backend-db psql -U $(DB_USERNAME) -d $(DB_NAME) -c "\copy b2b_clients (id, company_name, contact_name, email, phone_number) from '/db/data/b2bclients.csv' with (format csv, header true);"
 
 import-products:
-	docker exec -i farmaze-backend-db psql -U $$DB_USERNAME -d $$DB_NAME -c "\copy products (id,name, price, description, available_quantity, category) from '/db/data/products.csv' with (format csv, header true);"
+	docker exec -i farmaze-backend-db psql -U $$DB_USERNAME -d $$DB_NAME -c "\copy products (id,name, price, description, available_quantity, category,unit) from '/db/data/products.csv' with (format csv, header true);"
 
+cleanup-products:
+	docker exec -i farmaze-backend-db psql -U $$DB_USERNAME -d $$DB_NAME -c "TRUNCATE products CASCADE;"

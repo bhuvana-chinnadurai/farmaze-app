@@ -21,7 +21,7 @@ func NewOrderProductRepository(dbConn *sql.DB) OrderProducts {
 }
 
 func (o *OrderProductRepository) GetProductsForOrder(orderID uuid.UUID) ([]OrderProduct, error) {
-	rows, err := o.dbConn.Query("SELECT order_id, product_id, quantity, price FROM order_products WHERE order_id = $1", orderID)
+	rows, err := o.dbConn.Query("SELECT order_id, product_id, quantity FROM order_products WHERE order_id = $1", orderID)
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +30,7 @@ func (o *OrderProductRepository) GetProductsForOrder(orderID uuid.UUID) ([]Order
 	var orderProducts []OrderProduct
 	for rows.Next() {
 		var orderProduct OrderProduct
-		err := rows.Scan(&orderProduct.OrderID, &orderProduct.ProductID, &orderProduct.Quantity, &orderProduct.Price)
+		err := rows.Scan(&orderProduct.OrderID, &orderProduct.ProductID, &orderProduct.Quantity)
 		if err != nil {
 			return nil, err
 		}

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 )
@@ -20,12 +21,20 @@ type MigrationConfig struct {
 type Config struct {
 	DB        DBConfig
 	Migration MigrationConfig
+	Port      string
 }
 
 func LoadConfig() (*Config, error) {
 	dbPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		dbPort = 5432
+	}
+
+	var port string
+	parsedPort, err := strconv.Atoi(port)
+	if err != nil || parsedPort <= 0 || parsedPort > 65535 {
+		fmt.Println("Invalid port specified. Using default port 8080.")
+		port = "8080" // Set to default 8080
 	}
 
 	return &Config{
@@ -39,5 +48,6 @@ func LoadConfig() (*Config, error) {
 		Migration: MigrationConfig{
 			Path: os.Getenv("MIGRATION_PATH"),
 		},
+		Port: port,
 	}, nil
 }

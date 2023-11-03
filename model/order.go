@@ -3,13 +3,15 @@ package model
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
 
 type Orders interface {
 	Create(order *Order) error
-	List() ([]*Order, error)
+	ListAll() ([]*Order, error)
+	List(createdAt time.Time, clientID uuid.UUID) ([]*Order, error)
 	GetByClientID(clientID uuid.UUID) ([]Order, error)
 }
 
@@ -49,7 +51,7 @@ func (r *OrderRepository) Create(order *Order) error {
 
 	// Insert the order products into the order_products table
 	for _, product := range order.Products {
-		_, err = tx.Exec(`INSERT INTO order_products (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)`, order.ID, product.ProductID, product.Quantity, product.Price)
+		_, err = tx.Exec(`INSERT INTO order_products (order_id, product_id, quantity) VALUES ($1, $2, $3)`, order.ID, product.ProductID, product.Quantity)
 		if err != nil {
 			return fmt.Errorf("error while inserting to order_products: %s", err.Error())
 		}
@@ -63,11 +65,23 @@ func (r *OrderRepository) Create(order *Order) error {
 	return nil
 }
 
-// List returns a list of all orders.
-func (o *OrderRepository) List() ([]*Order, error) {
-	query := `SELECT id, client_id, total_price, created_at, status FROM orders;`
+func (o *OrderRepository) ListAll() ([]*Order, error) {
+	return o.List(time.Time{}, uuid.Nil)
+}
 
-	rows, err := o.dbConn.Query(query)
+// List returns a list of filtered orders.
+func (o *OrderRepository) List(createdAt time.Time, clientID uuid.UUID) ([]*Order, error) {
+	query := `SELECT id, client_id, total_price, created_at, status_id FROM orders WHERE 1=1`
+
+	if !createdAt.IsZero() {
+		query += ` AND created_at = ?`
+	}
+
+	if clientID != uuid.Nil {
+		query += ` AND client_id = ?`
+	}
+
+	rows, err := o.dbConn.Query(query, createdAt, clientID)
 	if err != nil {
 		return nil, err
 	}
