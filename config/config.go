@@ -19,9 +19,18 @@ type MigrationConfig struct {
 }
 
 type Config struct {
-	DB        DBConfig
-	Migration MigrationConfig
-	Port      string
+	DB         DBConfig
+	Migration  MigrationConfig
+	Port       string
+	CORSConfig CORSConfig
+}
+
+type CORSConfig struct {
+	AllowedOrigins     []string
+	AllowCredentials   bool
+	AllowedHeaders     []string
+	AllowedMethods     []string
+	OptionsPassthrough bool
 }
 
 func LoadConfig() (*Config, error) {
@@ -49,5 +58,12 @@ func LoadConfig() (*Config, error) {
 			Path: os.Getenv("MIGRATION_PATH"),
 		},
 		Port: port,
+		CORSConfig: CORSConfig{
+			AllowedOrigins:     []string{os.Getenv("CORS_ALLOWED_ORIGINS")},
+			AllowCredentials:   true,                                     // Set to your specific needs
+			AllowedHeaders:     []string{"*"},                            // Adjust based on your requirements
+			AllowedMethods:     []string{"GET", "POST", "PUT", "DELETE"}, // Adjust based on your requirements
+			OptionsPassthrough: true,                                     // Set to your specific needs
+		},
 	}, nil
 }

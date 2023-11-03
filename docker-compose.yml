@@ -13,6 +13,11 @@ services:
       DB_PASSWORD: postgres
       DB_NAME: postgres
       DB_PORT: 5432
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+      CORS_ALLOW_CREDENTIALS: "true"
+      CORS_ALLOWED_HEADERS: "*"
+      CORS_ALLOWED_METHODS: "GET,POST,PUT,DELETE"
+      CORS_OPTIONS_PASSTHROUGH: "true"
     depends_on:
       - db
     networks:
