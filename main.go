@@ -81,11 +81,13 @@ func main() {
 	router := SetupRoutes(conn)
 
 	// Create a new CORS handler allowing requests from http://localhost:3000
-	var c = cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
-		AllowCredentials: true, // You may need to set this depending on your needs
-	})
-	// Use the CORS-wrapped router
+	c := cors.New(cors.Options{
+		AllowedOrigins:     appConfig.CORSConfig.AllowedOrigins,
+		AllowedHeaders:     appConfig.CORSConfig.AllowedHeaders,
+		AllowedMethods:     appConfig.CORSConfig.AllowedMethods,
+		AllowCredentials:   appConfig.CORSConfig.AllowCredentials,
+		OptionsPassthrough: appConfig.CORSConfig.OptionsPassthrough,
+	}) // Use the CORS-wrapped router
 	handler := c.Handler(router)
 
 	fmt.Println("running on 8080")
