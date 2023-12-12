@@ -29,10 +29,25 @@ func InitDB(dbConfig config.DBConfig) *sql.DB {
 	return db
 }
 
-func SetupRoutes(conn *sql.DB) *mux.Router {
-	fmt.Println("setting up routes")
+func SetupRoutes(config *config.Config, conn *sql.DB) *mux.Router {
 	router := mux.NewRouter()
 
+	// Create a new CORS handler allowing requests from http://localhost:3000
+	c := cors.New(cors.Options{
+		AllowedOrigins:     config.CORSConfig.AllowedOrigins,
+		AllowedHeaders:     config.CORSConfig.AllowedHeaders,
+		AllowedMethods:     config.CORSConfig.AllowedMethods,
+		AllowCredentials:   config.CORSConfig.AllowCredentials,
+		OptionsPassthrough: config.CORSConfig.OptionsPassthrough,
+	}) // Use the CORS-wrapped router
+
+	fmt.Println("setting up routes")
+
+	// Handle all preflight request
+	router.Methods("OPTIONS").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//w.WriteHeader(http.StatusNoContent)
+		return
+	})
 	clientRepo := model.NewB2BClientRepository(conn)
 	productRepo := model.NewProductRepository(conn)
 	orderProductRepo := model.NewOrderProductRepository(conn)
@@ -49,19 +64,20 @@ func SetupRoutes(conn *sql.DB) *mux.Router {
 	orderAPI := api.NewOrder(orderRepo, productRepo, clientRepo, procurementRepo, orderStatuses)
 
 	// Define routes with corrected paths
-	router.HandleFunc("/b2bclients/summary", b2bClient.GetSummary).Methods("GET")
-	router.HandleFunc("/b2bclients/{client_id}", b2bClient.GetDetailsById).Methods("GET")
-	router.HandleFunc("/products", products.GetAll).Methods("GET")
+	router.HandleFunc("/api/v1/b2bclients", b2bClient.GetSummary).Methods("GET")
+	router.HandleFunc("/api/v1/b2bclients/{client_id}", b2bClient.GetDetailsById).Methods("GET")
+	router.HandleFunc("/api/v1/products", products.GetAll).Methods("GET")
 
-	router.HandleFunc("/products/{product_id}", products.GetByID).Methods("GET")
-	router.HandleFunc("/products", products.Create).Methods("POST")
-	router.HandleFunc("/products/{id}", products.Edit).Methods("PUT")
-	router.HandleFunc("/products/{id}", products.Delete).Methods("DELETE")
-	router.HandleFunc("/procurements", products.ListProcurement).Methods("GET")
+	router.HandleFunc("/api/v1/products/{product_id}", products.GetByID).Methods("GET")
+	router.HandleFunc("/api/v1/products", products.Create).Methods("POST")
+	router.HandleFunc("/api/v1/products/{id}", products.Edit).Methods("PUT")
+	router.HandleFunc("/api/v1/products/{id}", products.Delete).Methods("DELETE")
+	router.HandleFunc("/api/v1/procurements", products.ListProcurement).Methods("GET")
 
-	router.HandleFunc("/orders", orderAPI.Create).Methods("POST")
-	router.HandleFunc("/orders/{client_id}", orderAPI.GetByClientID).Methods("GET")
-	router.HandleFunc("/orders", orderAPI.List).Methods("GET")
+	router.HandleFunc("/api/v1/orders", orderAPI.Create).Methods("POST")
+	router.HandleFunc("/api/v1/orders/{client_id}", orderAPI.GetByClientID).Methods("GET")
+	router.HandleFunc("/api/v1/orders", orderAPI.List).Methods("GET")
+	router.Use(c.Handler)
 
 	return router
 }
@@ -78,18 +94,7 @@ func main() {
 	conn := InitDB(appConfig.DB)
 	defer conn.Close()
 
-	router := SetupRoutes(conn)
-
-	// Create a new CORS handler allowing requests from http://localhost:3000
-	c := cors.New(cors.Options{
-		AllowedOrigins:     appConfig.CORSConfig.AllowedOrigins,
-		AllowedHeaders:     appConfig.CORSConfig.AllowedHeaders,
-		AllowedMethods:     appConfig.CORSConfig.AllowedMethods,
-		AllowCredentials:   appConfig.CORSConfig.AllowCredentials,
-		OptionsPassthrough: appConfig.CORSConfig.OptionsPassthrough,
-	}) // Use the CORS-wrapped router
-	handler := c.Handler(router)
-
+	handler := SetupRoutes(appConfig, conn)
 	fmt.Println("running on 8080")
 	log.Fatal(http.ListenAndServe(":"+appConfig.Port, handler))
 }

@@ -91,11 +91,13 @@ func fetchOrderStatusId(orderStatuses []model.OrderStatus, desiredStatus OrderSt
 	return uuid.Nil
 }
 func (o *Order) Create(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("order create request")
 	var request CreateOrderRequest
 
 	// Parse the request body into the 'request' struct
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
+		fmt.Println("error while decoding request:", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -104,12 +106,14 @@ func (o *Order) Create(w http.ResponseWriter, r *http.Request) {
 	products, err := o.productRepo.GetAll()
 	if err != nil {
 		// Handle the error
+		fmt.Println("error while getting all products:", err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
 	// Check if the product IDs are valid (exist in the database)
 	if !o.areValidProductIDs(request.Products, products) {
+		fmt.Println("invalid product ID:", err.Error())
 		http.Error(w, "Invalid product ID", http.StatusBadRequest)
 		return
 	}
@@ -117,9 +121,11 @@ func (o *Order) Create(w http.ResponseWriter, r *http.Request) {
 	client, err := o.clientRepo.GetClientByID(request.ClientID)
 	if err != nil {
 		if _, ok := err.(model.NotFoundError); ok {
+			fmt.Println("Client not found:", err.Error())
 			http.Error(w, "Client not found", http.StatusNotFound)
 			return
 		}
+		fmt.Println("Internal Server Error:", err.Error())
 		// Handle other types of errors
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
@@ -152,6 +158,8 @@ func (o *Order) Create(w http.ResponseWriter, r *http.Request) {
 	// Create the order in the database
 	err = o.orderRepo.Create(&order)
 	if err != nil {
+		fmt.Println("Failed to create order: %s", err.Error())
+
 		http.Error(w, fmt.Sprintf("Failed to create order: %s", err.Error()), http.StatusInternalServerError)
 		return
 	}
@@ -159,6 +167,7 @@ func (o *Order) Create(w http.ResponseWriter, r *http.Request) {
 	//  This could be done by a  worker via rmq/kafka messages.
 	err = o.procurements.Create(order.Products, order.CreatedAt)
 	if err != nil {
+		fmt.Println("Failed to create procurements: %s", err.Error())
 		http.Error(w, fmt.Sprintf("Failed to create procurement: %s", err.Error()), http.StatusInternalServerError)
 		return
 	}
@@ -186,6 +195,8 @@ func (o *Order) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (o *Order) List(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("List orders")
+
 	clientIDString := r.URL.Query().Get("client_id")
 
 	fmt.Printf("\n Failed to retrieve orders: %s", clientIDString)
@@ -268,6 +279,8 @@ func (o *Order) List(w http.ResponseWriter, r *http.Request) {
 
 // GetByClientID retrieves orders specific to a given client.
 func (o *Order) GetByClientID(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("chec this ")
+
 	clientIDString := mux.Vars(r)["client_id"]
 
 	clientID, err := uuid.Parse(clientIDString)
