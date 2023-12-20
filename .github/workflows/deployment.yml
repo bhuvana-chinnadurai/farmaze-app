@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             echo "Test SSH connection"
-            
+
       - name: Copy the binary to EC2
         uses: appleboy/scp-action@master
         with:
@@ -51,4 +51,4 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            sudo systemctl restart myapp
+            sudo systemctl restart farmaze-backend
