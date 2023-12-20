@@ -1,4 +1,4 @@
-name: Deploy to AWS EC2
+name: Build and Deploy to AWS EC2
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.20'  # Update to match the version in your go.mod file
+          go-version: '1.20'  # Match the version in your go.mod file
 
       - name: Update Go modules
         run: |
@@ -25,6 +25,22 @@ jobs:
 
       - name: Build the application
         run: go build -v -o farmaze-backend .
+
+      - name: Archive production artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: farmaze-backend
+          path: farmaze-backend
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: farmaze-backend
 
       - name: Test SSH connection
         uses: appleboy/ssh-action@master
@@ -43,7 +59,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: "farmaze-backend"
           target: "/home/ec2-user/app"
-        
+
       - name: Restart the application
         uses: appleboy/ssh-action@master
         with:
