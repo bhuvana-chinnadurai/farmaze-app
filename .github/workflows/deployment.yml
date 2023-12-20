@@ -60,6 +60,15 @@ jobs:
           source: "farmaze-backend"
           target: "/home/ec2-user/app"
 
+      - name: Set execute permissions
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            chmod +x /home/ec2-user/app/farmaze-backend
+  
       - name: Restart the application
         uses: appleboy/ssh-action@master
         with:
