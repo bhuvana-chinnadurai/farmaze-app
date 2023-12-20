@@ -1,4 +1,4 @@
-name: Build and Deploy to AWS EC2
+name: Build and Deploy to AWS EC2 with Docker
 
 on:
   push:
@@ -6,74 +6,48 @@ on:
       - master
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
         with:
-          go-version: '1.20'  # Match the version in your go.mod file
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      - name: Update Go modules
+      - name: Build Docker images with Docker Compose
+        run: docker-compose build
+
+      - name: Push API Docker image to registry
         run: |
-          go mod tidy
-          go mod download
+          docker tag farmaze-backend-api yourusername/farmaze-backend-api:latest
+          docker push yourusername/farmaze-backend-api:latest
 
-      - name: Build the application
-        run: go build -v -o farmaze-backend .
-
-      - name: Archive production artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: farmaze-backend
-          path: farmaze-backend
+      # Optionally, push the DB image if you have a custom one
 
   deploy:
-    needs: build
+    needs: build-and-push
     runs-on: ubuntu-latest
-
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: farmaze-backend
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Test SSH connection
+      - name: Deploy to EC2 with Docker Compose
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            echo "Test SSH connection"
-
-      - name: Copy the binary to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          source: "farmaze-backend"
-          target: "/home/ec2-user/app"
-
-      - name: Set execute permissions
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
-            chmod +x /home/ec2-user/app/farmaze-backend
-  
-      - name: Restart the application
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
-            sudo systemctl restart farmaze-backend
+            # Sync the necessary files to the EC2 instance
+            rsync -avz --exclude='.git' --exclude='.github' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/app/farmaze-backend
+            
+            # Navigate to the app directory and run Docker Compose
+            ssh ec2-user@${{ secrets.EC2_HOST }} 'bash -s' << 'EOF'
+              cd /home/ec2-user/app/farmaze-backend
+              docker-compose pull
+              docker-compose up -d
+            EOF
