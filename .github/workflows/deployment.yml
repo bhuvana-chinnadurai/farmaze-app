@@ -24,7 +24,11 @@ jobs:
       - name: Push API Docker image to registry
         run: |
           docker push bhuvanachin/farmaze-backend-api:latest
-
+      - name: Add ECDSA SSH Key to Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_ECDSA_PUBLIC_KEY }}" >> ~/.ssh/known_hosts
+        
       # Optionally, push the DB image if you have a custom one
 
   deploy:
@@ -33,7 +37,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Deploy to EC2 with Docker Compose
         uses: appleboy/ssh-action@master
         with:
@@ -41,9 +44,12 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
+            ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} 'bash -s' << 'EOF'
+            # Your commands here
+            EOF
             # Sync the necessary files to the EC2 instance
-            rsync -avz --exclude='.git' --exclude='.github' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/app/farmaze-backend
-            
+            rsync -avz -e --exclude='.git' --exclude='.github' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/app/farmaze-backend
+
             # Navigate to the app directory and run Docker Compose
             ssh ec2-user@${{ secrets.EC2_HOST }} 'bash -s' << 'EOF'
               cd /home/ec2-user/app/farmaze-backend
