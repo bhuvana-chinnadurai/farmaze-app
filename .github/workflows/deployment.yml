@@ -23,7 +23,6 @@ jobs:
 
       - name: Push API Docker image to registry
         run: |
-          docker tag farmaze-backend-api bhuvanachin/farmaze-backend-api:latest
           docker push bhuvanachin/farmaze-backend-api:latest
 
       # Optionally, push the DB image if you have a custom one
