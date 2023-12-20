@@ -14,10 +14,10 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN go build -o main .
+RUN go build -o farmze-backend-api .
 
 # Expose port 8080 for the API
 EXPOSE 8080
 
 # Command to run the application
-CMD ["./main"]
+CMD ["./farmze-backend-api"]

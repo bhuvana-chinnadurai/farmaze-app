@@ -2,6 +2,7 @@ version: '3'
 
 services:
   api:
+    image: bhuvanachin/farmaze-backend-api:latest
     build: .
     container_name: farmaze-backend-api
     restart: always
