@@ -48,6 +48,6 @@ jobs:
             rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude='.git' --exclude='.github' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/app/farmaze-backend
 
             # Navigate to the app directory and run Docker Compose
-            cd /home/ec2-user/app/farmaze-backend
+            cd /home/ec2-user/app
             docker-compose pull
             docker-compose up -d
