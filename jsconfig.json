@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "paths": {
-      "@hoc/*": ["./src/*"]
+      "@hoc/*": ["./src/hoc/*"],
+      "@api/*": ["./src/api/*"],
     }
   }
 }

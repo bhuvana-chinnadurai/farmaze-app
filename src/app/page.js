@@ -1,95 +1,150 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client"
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Table, Pagination, Spin } from "antd";
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 
-export default function Home() {
+import withHeader from '@hoc/withHeader';
+import { getProducts, createOrder } from '@api/product.api';
+import { COLUMNS, PAGE_SIZE } from "./constants";
+import CategorySelect from "./components/CategorySelect";
+
+import {
+  Container,
+  Title,
+  FilterContainer,
+  SearchInput,
+  TableContainer,
+  QuantityContainer,
+  QuantityInput,
+  LoadingContainer,
+  Footer,
+  FooterButton,
+} from "./page.styled";
+
+const Home = ({ isLoggedIn }) => {
+  const [productList, setProductList] = useState([]);
+  const [orderInfo, setOrderInfo] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    getProducts()
+      .then(({ data }) => {
+        setProductList(data);
+      })
+      .catch(() => {
+        // alert("Error");
+      })
+  }, [isLoggedIn]);
+
+  const handlePageChange = (page, CurrentPageSize) => {
+    setCurrentPage(page || 1);
+    setPageSize(CurrentPageSize);
+  };
+
+  const handleQuantityChange = productInfo => (ev) => {
+    setOrderInfo({
+      ...orderInfo,
+      [productInfo.id]: {
+        ...productInfo,
+        qty: ev.target.value
+      },
+    });
+  };
+
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+  };
+
+  const handleInputChange = (ev) => {
+    setSearchInput(ev.target.value);
+  };
+
+  const filterdProductData = useMemo(() => productList.filter((productInfo) => {
+    const matchesSearch = !searchInput || `${productInfo.name} ${productInfo.description}`.toLowerCase().includes(searchInput.toLowerCase());
+    const matchesCategory = !selectedCategory.length || selectedCategory.includes(productInfo.category);
+    return matchesSearch && matchesCategory;
+  }), [searchInput, selectedCategory, productList]);
+
+  const paginatedData = useMemo(() => {
+    const fromIdx = (currentPage - 1) * pageSize;
+    const toLength = currentPage * pageSize;
+    return filterdProductData.slice(fromIdx, toLength);
+  }, [filterdProductData, pageSize, currentPage]);
+
+  const updateQuantityWithHandle = (numberToAdd, productInfo) => () => {
+    const quantityToUpdate = Number(orderInfo[productInfo.id]?.qty || 0) + numberToAdd;
+    setOrderInfo({
+      ...orderInfo,
+      [productInfo.id]: {
+        ...productInfo,
+        qty: quantityToUpdate < 0 ? 0 : quantityToUpdate,
+      },
+    });
+  };
+
+  const getColumns = useCallback(() => [
+    ...COLUMNS,
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      render: (_, productInfo) => (
+        <QuantityContainer>
+          <MinusOutlined onClick={updateQuantityWithHandle(-1, productInfo)} />
+          <QuantityInput
+            type="number"
+            min={0}
+            value={orderInfo[productInfo.id]?.qty}
+            onChange={handleQuantityChange(productInfo)}
+          />
+          <PlusOutlined onClick={updateQuantityWithHandle(1, productInfo)} />
+        </QuantityContainer>
+      ),
+    }
+  ], [orderInfo]);
+
+  if (!isLoggedIn) return <LoadingContainer><Spin size="large" /></LoadingContainer>;
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <>
+      <Container>
+        <Title>Products</Title>
+        <FilterContainer>
+          <CategorySelect onChange={handleCategoryChange} selectedCategory={selectedCategory} />
+          <SearchInput
+            value={searchInput}
+            onChange={handleInputChange}
+            placeholder="Search Products"
+          />
+        </FilterContainer>
+        <TableContainer>
+          <Table
+            columns={getColumns()}
+            dataSource={paginatedData}
+            pagination={false}
+            rowKey="id"
+          />
+          <Pagination
+            total={filterdProductData.length}
+            onChange={handlePageChange}
+            defaultCurrent={1}
+            pageSizeOptions={[5, 10, 20, 50]}
+            showSizeChanger
+            current={currentPage}
+            pageSize={pageSize}
+          />
+        </TableContainer>
+      </Container>
+      <Footer>
+        <FooterButton type="tertiary">Reset</FooterButton>
+        <FooterButton>Preview</FooterButton>
+        <FooterButton type="primary">Place Order</FooterButton>
+      </Footer>
+    </>
   )
 }
+
+export default withHeader(Home);
