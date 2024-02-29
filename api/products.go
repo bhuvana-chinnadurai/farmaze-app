@@ -148,11 +148,13 @@ func (pr *Products) Delete(w http.ResponseWriter, r *http.Request) {
 // @Failure 500 "Internal server error"
 // @Router /products [get]
 func (pr *Products) GetAll(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Get all products start")
 	products, err := pr.products.GetAll()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	fmt.Println("Get all products end")
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(products)
