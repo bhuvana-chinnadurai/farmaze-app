@@ -1,9 +1,11 @@
 package model
 
 import (
+	"log"
 	"time"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type B2BClient struct {
@@ -57,4 +59,27 @@ func (e NotFoundError) Error() string {
 		return e.Message
 	}
 	return "Not Found"
+}
+
+// User represents the user model that will be stored in the database
+type User struct {
+	ID       int
+	Username string
+	Password string // This will store the hashed password
+	Role     string // "user" or "admin"
+}
+
+// NewUser creates a new User instance and hashes the password
+func NewUser(username, password, role string) (*User, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Println("error while generating password: ", err.Error())
+		return nil, err
+	}
+
+	return &User{
+		Username: username,
+		Password: string(hashedPassword),
+		Role:     role,
+	}, nil
 }

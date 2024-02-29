@@ -33,6 +33,17 @@ func NewProducts(products model.Products, procurements model.Procurements) *Prod
 	}
 }
 
+// Create godoc
+// @Summary Add a new product
+// @Description Adds a new product to the database
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param product body model.Product true "Product to add"
+// @Success 200 {object} model.Product "Successfully created product"
+// @Failure 400 "Invalid request format"
+// @Failure 500 "Internal server error"
+// @Router /products [post]
 // Add a new API endpoint to create a product
 func (p *Products) Create(w http.ResponseWriter, r *http.Request) {
 	var product model.Product
@@ -56,6 +67,18 @@ func (p *Products) Create(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(product)
 }
 
+// Edit godoc
+// @Summary Edit a product
+// @Description Edits an existing product identified by ID
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param id path string true "Product ID"
+// @Param product body model.Product true "Product data to update"
+// @Success 200 {object} model.Product "Successfully updated product"
+// @Failure 400 "Invalid request format or product ID"
+// @Failure 500 "Internal server error"
+// @Router /products/{id} [put]
 func (pr *Products) Edit(w http.ResponseWriter, r *http.Request) {
 	var product model.Product
 
@@ -88,6 +111,16 @@ func (pr *Products) Edit(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(product)
 }
 
+// Delete godoc
+// @Summary Delete a product
+// @Description Deletes a product identified by ID
+// @Tags products
+// @Produce json
+// @Param id path string true "Product ID"
+// @Success 204 "Successfully deleted product"
+// @Failure 400 "Invalid product ID format"
+// @Failure 500 "Internal server error"
+// @Router /products/{id} [delete]
 func (pr *Products) Delete(w http.ResponseWriter, r *http.Request) {
 	productID := mux.Vars(r)["id"]
 
@@ -105,6 +138,15 @@ func (pr *Products) Delete(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+// GetAll godoc
+// @Summary List all products
+// @Description Retrieves a list of all products
+// @Tags products
+// @Produce json
+// @Success 200 {array} model.Product "List of products"
+// @Failure 500 "Internal server error"
+// @Router /products [get]
 func (pr *Products) GetAll(w http.ResponseWriter, r *http.Request) {
 	products, err := pr.products.GetAll()
 	if err != nil {
@@ -116,6 +158,16 @@ func (pr *Products) GetAll(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(products)
 }
 
+// GetByID godoc
+// @Summary Get a product by ID
+// @Description Retrieves a product's details by its ID
+// @Tags products
+// @Produce json
+// @Param product_id path string true "Product ID"
+// @Success 200 {object} model.Product "Product details"
+// @Failure 400 "Invalid product ID format"
+// @Failure 500 "Failed to retrieve product by ID"
+// @Router /products/{product_id} [get]
 func (pr *Products) GetByID(w http.ResponseWriter, r *http.Request) {
 	productIDString := mux.Vars(r)["product_id"]
 
@@ -134,6 +186,17 @@ func (pr *Products) GetByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(product)
 }
+
+// ListProcurement godoc
+// @Summary List procurements by date
+// @Description Lists all procurements for a given date
+// @Tags procurements
+// @Produce json
+// @Param date query string true "Date for procurement listing"
+// @Success 200 {array} ProcurementResponse "List of procurements for the specified date"
+// @Failure 400 "Invalid date parameter"
+// @Failure 500 "Internal server error"
+// @Router /procurements [get]
 func (pr *Products) ListProcurement(w http.ResponseWriter, r *http.Request) {
 	dateStr := r.URL.Query().Get("date")
 

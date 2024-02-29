@@ -90,6 +90,18 @@ func fetchOrderStatusId(orderStatuses []model.OrderStatus, desiredStatus OrderSt
 
 	return uuid.Nil
 }
+
+// CreateOrder godoc
+// @Summary Create a new order
+// @Description Creates a new order with the specified details
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param order body CreateOrderRequest true "Create Order"
+// @Success 200 {object} CreateOrderResponse "Order successfully created"
+// @Failure 400 "Invalid request"
+// @Failure 500 "Internal Server Error"
+// @Router /orders [post]
 func (o *Order) Create(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("order create request")
 	var request CreateOrderRequest
@@ -194,6 +206,16 @@ func (o *Order) Create(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// ListOrders godoc
+// @Summary List all orders
+// @Description Lists all orders, optionally filtered by client ID
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param client_id query string false "Client ID to filter orders"
+// @Success 200 {array} CreateOrderResponse "List of orders"
+// @Failure 500 "Internal Server Error"
+// @Router /orders [get]
 func (o *Order) List(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("List orders")
 
@@ -277,6 +299,17 @@ func (o *Order) List(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// GetOrdersByClientID godoc
+// @Summary Get orders by client ID
+// @Description Gets orders specific to a given client ID
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param client_id path string true "Client ID"
+// @Success 200 {array} CreateOrderResponse "List of orders for the client"
+// @Failure 400 "Invalid client ID format"
+// @Failure 500 "Internal Server Error"
+// @Router /orders/{client_id} [get]
 // GetByClientID retrieves orders specific to a given client.
 func (o *Order) GetByClientID(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("chec this ")

@@ -1,194 +1,438 @@
-openapi: 3.0.0
+definitions:
+  api.CreateOrderRequest:
+    properties:
+      client_id:
+        type: string
+      created_at:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/api.ProductRequest'
+        type: array
+      total_price:
+        type: number
+    type: object
+  api.CreateOrderResponse:
+    properties:
+      client_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/api.ProductResponse'
+        type: array
+      status:
+        $ref: '#/definitions/api.OrderStatus'
+      total_price:
+        type: number
+    type: object
+  api.OrderStatus:
+    enum:
+    - ordered
+    type: string
+    x-enum-varnames:
+    - Ordered
+  api.ProcurementResponse:
+    properties:
+      product_id:
+        type: string
+      product_name:
+        type: string
+      quantity:
+        type: integer
+      unit:
+        type: string
+    type: object
+  api.ProductRequest:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  api.ProductResponse:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  api.loginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  api.registerRequest:
+    properties:
+      password:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    type: object
+  model.B2BClient:
+    properties:
+      company_name:
+        type: string
+      contact_name:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  model.Product:
+    properties:
+      available_quantity:
+        type: integer
+      category:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      unit:
+        type: string
+    type: object
 info:
-  title: Farmaze Backend API
-  version: 1.0.0
+  contact: {}
 paths:
-  /b2bclients/summary:
+  /api/v1/b2bclients:
     get:
-      summary: Get a summary of B2B clients
+      consumes:
+      - application/json
+      description: Retrieve a list of all B2B clients' summaries
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    ID:
-                      type: string
-                      format: uuid
-                    CompanyName:
-                      type: string
-                    ContactName:
-                      type: string
-                    Email:
-                      type: string
-                    PhoneNumber:
-                      type: string
-  /b2bclients/{client_id}:
-    get:
-      summary: Get details of a B2B client by ID
-      parameters:
-        - in: path
-          name: client_id
-          required: true
+        "200":
+          description: List of B2B client summaries
           schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ID:
-                    type: string
-                    format: uuid
-                  CompanyName:
-                    type: string
-                  ContactName:
-                    type: string
-                  Email:
-                    type: string
-                  PhoneNumber:
-                    type: string
-  /products:
+            items:
+              $ref: '#/definitions/model.B2BClient'
+            type: array
+      summary: Get client summaries
+      tags:
+      - B2B
+  /api/v1/b2bclients/{client_id}:
     get:
-      summary: Get a list of all products
+      consumes:
+      - application/json
+      description: Retrieve details of a specific B2B client by their ID
+      parameters:
+      - description: Client ID
+        in: path
+        name: client_id
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    ID:
-                      type: string
-                      format: uuid
-                    Name:
-                      type: string
-                    Price:
-                      type: number
-                    Description:
-                      type: string
-                    AvailableQuantity:
-                      type: integer
-                    Category:
-                      type: string
-  /orders:
+        "200":
+          description: B2B client details
+          schema:
+            $ref: '#/definitions/model.B2BClient'
+        "400":
+          description: Invalid client ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Client not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get client details by ID
+      tags:
+      - B2B
+  /login:
     post:
-      summary: Create a new order
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ClientID:
-                  type: string
-                  format: uuid
-                Products:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      ProductID:
-                        type: string
-                        format: uuid
-                      Quantity:
-                        type: integer
+      consumes:
+      - application/json
+      description: Logs in a user with the provided username and password, returning
+        a JWT token upon success
+      parameters:
+      - description: Login Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.loginRequest'
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ID:
-                    type: string
-                    format: uuid
-                  ClientID:
-                    type: string
-                    format: uuid
-                  Products:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        ProductID:
-                          type: string
-                          format: uuid
-                        Quantity:
-                          type: integer
-                  TotalPrice:
-                    type: number
-                  CreatedAt:
-                    type: string
-                    format: date-time
-                  Status:
-                    type: string
-                    format: uuid
+        "200":
+          description: 'Success: Token generated and returned'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: 'Bad Request: Cannot parse request'
+        "401":
+          description: 'Unauthorized: Invalid username or password'
+        "500":
+          description: 'Internal Server Error: Failed to generate token'
+      summary: User login
+      tags:
+      - users
+  /orders:
     get:
-      summary: Get a list of all orders
+      consumes:
+      - application/json
+      description: Lists all orders, optionally filtered by client ID
+      parameters:
+      - description: Client ID to filter orders
+        in: query
+        name: client_id
+        type: string
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    ID:
-                      type: string
-                      format: uuid
-                    ClientID:
-                      type: string
-                      format: uuid
-                    Products:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          ProductID:
-                            type: string
-                            format: uuid
-                          Quantity:
-                            type: integer
-                    TotalPrice:
-                      type: number
-                    CreatedAt:
-                      type: string
-                      format: date-time
-                    Status:
-                      type: string
-                      format: uuid
+        "200":
+          description: List of orders
+          schema:
+            items:
+              $ref: '#/definitions/api.CreateOrderResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+      summary: List all orders
+      tags:
+      - orders
+    post:
+      consumes:
+      - application/json
+      description: Creates a new order with the specified details
+      parameters:
+      - description: Create Order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Order successfully created
+          schema:
+            $ref: '#/definitions/api.CreateOrderResponse'
+        "400":
+          description: Invalid request
+        "500":
+          description: Internal Server Error
+      summary: Create a new order
+      tags:
+      - orders
   /orders/{client_id}:
     get:
-      summary: Get orders by client ID
+      consumes:
+      - application/json
+      description: Gets orders specific to a given client ID
       parameters:
-        - in: path
-          name: client_id
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - description: Client ID
+        in: path
+        name: client_id
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-
+        "200":
+          description: List of orders for the client
+          schema:
+            items:
+              $ref: '#/definitions/api.CreateOrderResponse'
+            type: array
+        "400":
+          description: Invalid client ID format
+        "500":
+          description: Internal Server Error
+      summary: Get orders by client ID
+      tags:
+      - orders
+  /procurements:
+    get:
+      description: Lists all procurements for a given date
+      parameters:
+      - description: Date for procurement listing
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of procurements for the specified date
+          schema:
+            items:
+              $ref: '#/definitions/api.ProcurementResponse'
+            type: array
+        "400":
+          description: Invalid date parameter
+        "500":
+          description: Internal server error
+      summary: List procurements by date
+      tags:
+      - procurements
+  /products:
+    get:
+      description: Retrieves a list of all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of products
+          schema:
+            items:
+              $ref: '#/definitions/model.Product'
+            type: array
+        "500":
+          description: Internal server error
+      summary: List all products
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Adds a new product to the database
+      parameters:
+      - description: Product to add
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/model.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created product
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Invalid request format
+        "500":
+          description: Internal server error
+      summary: Add a new product
+      tags:
+      - products
+  /products/{id}:
+    delete:
+      description: Deletes a product identified by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Successfully deleted product
+        "400":
+          description: Invalid product ID format
+        "500":
+          description: Internal server error
+      summary: Delete a product
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: Edits an existing product identified by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product data to update
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/model.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated product
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Invalid request format or product ID
+        "500":
+          description: Internal server error
+      summary: Edit a product
+      tags:
+      - products
+  /products/{product_id}:
+    get:
+      description: Retrieves a product's details by its ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product details
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Invalid product ID format
+        "500":
+          description: Failed to retrieve product by ID
+      summary: Get a product by ID
+      tags:
+      - products
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user with a username, password, and role
+      parameters:
+      - description: Registration Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.registerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 'Success: User successfully registered'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: 'Bad Request: Cannot parse request'
+        "500":
+          description: 'Internal Server Error: Error while creating a new user'
+      summary: Register a new user
+      tags:
+      - users
+swagger: "2.0"

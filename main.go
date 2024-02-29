@@ -59,12 +59,18 @@ func SetupRoutes(config *config.Config, conn *sql.DB) *mux.Router {
 		fmt.Println("error occurred while fetching orderStatus: ", err.Error())
 	}
 
+	// Initialize Users service
+	usersService := api.NewUsers(conn)
+
 	b2bClient := api.New(clientRepo)
 	products := api.NewProducts(productRepo, procurementRepo)
 	orderAPI := api.NewOrder(orderRepo, productRepo, clientRepo, procurementRepo, orderStatuses)
 
+	http.HandleFunc("/register", usersService.RegisterUser)
+	http.HandleFunc("/login", usersService.LoginUser)
+
 	// Define routes with corrected paths
-	router.HandleFunc("/api/v1/b2bclients", b2bClient.GetSummary).Methods("GET")
+	router.HandleFunc("/api/v1/b2bclients", b2bClient.GetAll).Methods("GET")
 	router.HandleFunc("/api/v1/b2bclients/{client_id}", b2bClient.GetDetailsById).Methods("GET")
 	router.HandleFunc("/api/v1/products", products.GetAll).Methods("GET")
 

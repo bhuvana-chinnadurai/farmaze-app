@@ -45,7 +45,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             # Sync the necessary files to the EC2 instance
-            rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude='.git .github .nvm' ./farmaze-backend ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/
+            rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude='.git .github .nvm' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/
 
             # Navigate to the app directory and run Docker Compose
             cd /home/ec2-user/farmaze-backend/
