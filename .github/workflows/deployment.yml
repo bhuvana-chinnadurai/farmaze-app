@@ -27,7 +27,7 @@ jobs:
       - name: Add ECDSA SSH Key to Known Hosts
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_ECDSA_PUBLIC_KEY }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" >> ~/.ssh/known_hosts
 
       # Optionally, push the DB image if you have a custom one
 
