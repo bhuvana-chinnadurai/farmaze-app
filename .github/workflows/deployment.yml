@@ -36,15 +36,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Prepare SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > /tmp/ec2_ssh_private_key
+          chmod 600 /tmp/ec2_ssh_private_key
       - name: Deploy to EC2 with Docker Compose
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          key: /tmp/ec2_ssh_private_key
           script: |
             # Sync the necessary files to the EC2 instance
-            rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude='.git .github .nvm' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/
+            rsync -avz -e "ssh -o StrictHostKeyChecking=no -i /tmp/ec2_ssh_private_key" --exclude='.git .github .nvm' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/farmaze-backend/
 
             # Navigate to the app directory and run Docker Compose
             cd /home/ec2-user/farmaze-backend/
