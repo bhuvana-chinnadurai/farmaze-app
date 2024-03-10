@@ -36,14 +36,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Check decoded key format
-        run: |
-          echo "${{ secrets.EC2_SSH_PRIVATE_KEY_BASE64 }}" | base64 --decode > /tmp/ec2_ssh_private_key
-          echo "$(head -c 100 /tmp/ec2_ssh_private_key)"
       - name: Prepare SSH key
         run: |
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY_BASE64 }}" | base64 --decode > /tmp/ec2_ssh_private_key
           chmod 600 /tmp/ec2_ssh_private_key
+      - name: Check decoded key format
+        run: |
+          cat /tmp/ec2_ssh_private_key
       - name: Deploy to EC2 with Docker Compose
         uses: appleboy/ssh-action@master
         with:
