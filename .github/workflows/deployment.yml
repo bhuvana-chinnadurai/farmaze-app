@@ -50,6 +50,7 @@ jobs:
           port: 22
           username: ec2-user
           key: /tmp/ec2_ssh_private_key
+          passphrase: farmaze
           script: |
             # Sync the necessary files to the EC2 instance
             rsync -avz -e "ssh -o StrictHostKeyChecking=no -i /tmp/ec2_ssh_private_key" --exclude='.git .github .nvm' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/farmaze-backend/
