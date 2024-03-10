@@ -47,6 +47,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.EC2_HOST }}
+          port: 22
           username: ec2-user
           key: /tmp/ec2_ssh_private_key
           script: |
