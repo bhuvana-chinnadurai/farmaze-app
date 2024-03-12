@@ -59,7 +59,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          # passphrase: ${{ secrets.EC2_PASSPHRASE }}
+          passphrase: ${{ secrets.EC2_PASSPHRASE }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: 22
           script: |
