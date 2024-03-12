@@ -48,7 +48,8 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: /tmp/ec2_ssh_private_key
+          # passphrase: ${{ secrets.EC2_PASSPHRASE }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: 22
           script: |
             # Sync the necessary files to the EC2 instance
