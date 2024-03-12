@@ -44,7 +44,7 @@ jobs:
         run: |
           cat /tmp/ec2_ssh_private_key
       - name: Deploy to EC2 with Docker Compose
-        uses: appleboy/ssh-action@v0.1.4
+        uses: appleboy/ssh-action@vmaster
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
