@@ -47,10 +47,9 @@ jobs:
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.EC2_HOST }}
-          port: 22
-          username: ec2-user
+          username: ${{ secrets.EC2_USER }}
           key: /tmp/ec2_ssh_private_key
-          passphrase: farmaze
+          port: 22
           script: |
             # Sync the necessary files to the EC2 instance
             rsync -avz -e "ssh -o StrictHostKeyChecking=no -i /tmp/ec2_ssh_private_key" --exclude='.git .github .nvm' ./ ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/farmaze-backend/
