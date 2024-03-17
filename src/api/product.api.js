@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080/api/v1";
-console.log("BASE_URL outside get products app", BASE_URL); // Log the BASE_URL
-
+const { publicRuntimeConfig } = getConfig();
 
 export const getProducts = () => {
-  console.log("BASE_URL:", BASE_URL); // Log the BASE_URL
+  const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL;
+  console.log("BASE_URL:", BASE_URL);
   return axios.get(`${BASE_URL}/products`);
 }
 
