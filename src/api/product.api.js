@@ -1,8 +1,6 @@
 import axios from "axios";
-import getConfig from "next/config";
 
-const { publicRuntimeConfig } = getConfig();
-const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL;
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const getProducts = () => {
   console.log("BASE_URL:", BASE_URL);
