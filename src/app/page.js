@@ -33,8 +33,9 @@ const Home = ({ isLoggedIn }) => {
     if (!isLoggedIn) return;
     getProducts()
       .then(({ response }) => {
-        if (response && response.data) {
-          setProductList(response.data);
+        console.log("response inside page",response)
+        if (response) {
+          setProductList(response);
         } else {
           console.error("Empty or invalid response:", response);
         }

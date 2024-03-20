@@ -6,6 +6,7 @@ export const getProducts = async () => {
   const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL
   try {
     const response = await axios.get(`${BASE_URL}/products`);
+    console.log("response",response);
     return response
   } catch (error) {
     console.error("Error fetching products:", error);
