@@ -1,20 +1,10 @@
 import axios from "axios";
+import getConfig from 'next/config';
 
-export const getServerSideProps = async () => {
-  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  
-  // Fetch data using the BASE_URL if needed
-  
-  console.log(BASE_URL)
-  return {
-    props: {
-      BASE_URL
-    }
-  };
-};
+const { publicRuntimeConfig } = getConfig();
 
 export const getProducts = async () => {
-  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL;
   console.log("BASE_URL in getProducts:", BASE_URL); // Log BASE_URL
   
   try {
@@ -26,9 +16,8 @@ export const getProducts = async () => {
   }
 }
 
-
 export const createOrder = async (payload) => {
-  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL;
   console.log("BASE_URL:", BASE_URL);
   try {
     const response = await axios.post(`${BASE_URL}/orders`, payload);
