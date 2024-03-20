@@ -16,7 +16,7 @@ export const getProducts = async () => {
 export const createOrder = async (payload) => {
   try {
     const response = await axios.post(`${BASE_URL}/orders`, payload);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error creating order:", error);
     return null;
