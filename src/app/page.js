@@ -31,18 +31,12 @@ const Home = ({ isLoggedIn }) => {
 
   useEffect(() => {
     if (!isLoggedIn) return;
-    getProducts()
-      .then(({ response }) => {
-        console.log("response inside page",response)
-        if (response) {
-          setProductList(response);
-        } else {
-          console.error("Empty or invalid response:", response);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      })
+    const products = getProducts() 
+    if (products) {
+      setProductList(products);
+    } else {
+      console.error("Empty or invalid response:", products);
+    }
   }, [isLoggedIn]);
 
   const handlePageChange = (page, CurrentPageSize) => {
