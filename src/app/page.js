@@ -34,6 +34,7 @@ const Home = ({ isLoggedIn }) => {
     getProducts()
       .then(({ response }) => {
         setProductList(response);
+        console.log(productList)
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
