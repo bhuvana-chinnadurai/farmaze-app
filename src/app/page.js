@@ -29,9 +29,9 @@ const Home = ({ isLoggedIn }) => {
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
-  useEffect(({BASE_URL}) => {
+  useEffect(({}) => {
     if (!isLoggedIn) return;
-    getProducts(BASE_URL)
+    getProducts()
       .then(({ data }) => {
         setProductList(data);
       })
