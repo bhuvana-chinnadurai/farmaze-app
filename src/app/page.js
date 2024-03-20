@@ -33,8 +33,11 @@ const Home = ({ isLoggedIn }) => {
     if (!isLoggedIn) return;
     getProducts()
       .then(({ response }) => {
-        setProductList(response.data);
-        console.log(productList)
+        if (response && response.data) {
+          setProductList(response.data);
+        } else {
+          console.error("Empty or invalid response:", response);
+        }
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
