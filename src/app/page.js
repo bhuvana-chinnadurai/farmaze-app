@@ -29,7 +29,7 @@ const Home = ({ isLoggedIn }) => {
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
-  useEffect(({}) => {
+  useEffect(() => {
     if (!isLoggedIn) return;
     getProducts()
       .then(({ response }) => {

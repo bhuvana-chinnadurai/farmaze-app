@@ -1,12 +1,10 @@
 import axios from "axios";
-import getConfig from 'next/config';
+import { publicRuntimeConfig } from 'next.config.js';
 
-const { publicRuntimeConfig } = getConfig();
 
 export const getProducts = async () => {
-  const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL;
-  console.log("BASE_URL in getProducts:", BASE_URL); // Log BASE_URL
-  
+  console.log("BASE_URL in getProducts:", publicRuntimeConfig); // Log BASE_URL
+  const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL
   try {
     const response = await axios.get(`${BASE_URL}/products`);
     return response.data;
@@ -17,8 +15,7 @@ export const getProducts = async () => {
 }
 
 export const createOrder = async (payload) => {
-  const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL;
-  console.log("BASE_URL:", BASE_URL);
+  console.log("BASE_URL:", REACT_APP_API_BASE_URL);
   try {
     const response = await axios.post(`${BASE_URL}/orders`, payload);
     return response.data;
