@@ -33,7 +33,7 @@ const Home = ({ isLoggedIn }) => {
     if (!isLoggedIn) return;
     getProducts()
       .then(({ response }) => {
-        setProductList(response);
+        setProductList(response.data);
         console.log(productList)
       })
       .catch((error) => {
