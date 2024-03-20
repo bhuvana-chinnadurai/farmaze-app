@@ -35,8 +35,10 @@ const Home = ({ isLoggedIn }) => {
       .then(({ data }) => {
         setProductList(data);
       })
-      .catch(() => {
+      .catch((error) => {
         // alert("Error");
+        console.error("Error fetching products:", error);
+        // Handle the error (e.g., show an alert)
       })
   }, [isLoggedIn]);
 
