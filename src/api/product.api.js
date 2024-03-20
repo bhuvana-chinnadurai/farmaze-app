@@ -5,6 +5,7 @@ export const getServerSideProps = async () => {
   
   // Fetch data using the BASE_URL if needed
   
+  console.log(BASE_URL)
   return {
     props: {
       BASE_URL
@@ -14,7 +15,8 @@ export const getServerSideProps = async () => {
 
 export const getProducts = async () => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  console.log("BASE_URL:", BASE_URL);
+  console.log("BASE_URL in getProducts:", BASE_URL); // Log BASE_URL
+  
   try {
     const response = await axios.get(`${BASE_URL}/products`);
     return response.data;
@@ -23,6 +25,7 @@ export const getProducts = async () => {
     return null;
   }
 }
+
 
 export const createOrder = async (payload) => {
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;

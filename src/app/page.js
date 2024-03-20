@@ -4,7 +4,7 @@ import { Table, Pagination, Spin } from "antd";
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 
 import withHeader from '@hoc/withHeader';
-import { getProducts, createOrder } from '@api/product.api';
+import { getProducts } from '@api/product.api';
 import { COLUMNS, PAGE_SIZE } from "./constants";
 import CategorySelect from "./components/CategorySelect";
 
@@ -32,8 +32,8 @@ const Home = ({ isLoggedIn }) => {
   useEffect(({}) => {
     if (!isLoggedIn) return;
     getProducts()
-      .then(({ data }) => {
-        setProductList(data);
+      .then(({ response }) => {
+        setProductList(response.data);
       })
       .catch((error) => {
         // alert("Error");
