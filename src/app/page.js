@@ -80,11 +80,45 @@ const Home = ({ isLoggedIn }) => {
     setSearchInput(ev.target.value);
   };
 
+  function convertOrderRequest(orderRequest, clientId) {
+    const products = [];
+    let total_price = 0;
+
+    // Iterate over each item in the original order
+    Object.entries(orderRequest).forEach(([productId, productDetails]) => {
+        const quantity = parseInt(productDetails.qty, 10);
+        const pricePerUnit = parseFloat(productDetails.price);
+        const subtotal = quantity * pricePerUnit;
+
+        // Add product to the products list with new format
+        products.push({
+            product_id: productId,
+            quantity: quantity
+        });
+
+        // Accumulate total price
+        total_price += subtotal;
+    });
+
+    // Return the new order format
+    return {
+        client_id: clientId,
+        products: products,
+        total_price: total_price.toFixed(2)  // Ensure the total price is a string with two decimal places
+    };
+}
+
+
   const handlePlaceOrder = async () => {
     try {
       // Assuming 'orderRequest' contains all necessary order data
-      const order = await createOrder(orderRequest);
+      console.log("orderRequest",orderRequest)
+      const preparedRequest= convertOrderRequest(orderRequest,"42ae47d6-3a90-4652-a28b-6cd9f3a139fc")
+      const order = await createOrder(preparedRequest);
       setOrderSummary(order);
+
+      console.log("orderRequest after changing",preparedRequest)
+
       setOrderPlaced(true); 
       // Set order placed state to true
       // Add additional logic for success feedback or redirection
