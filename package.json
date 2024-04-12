@@ -20,6 +20,7 @@
   "devDependencies": {
     "dotenv": "^16.4.5",
     "eslint": "^8",
-    "eslint-config-next": "14.0.1"
+    "eslint-config-next": "14.0.1",
+    "miragejs": "^0.1.48"
   }
 }

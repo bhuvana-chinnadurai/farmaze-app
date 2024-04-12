@@ -15,6 +15,7 @@ export const getProducts = async () => {
 }
 
 export const createOrder = async (payload) => {
+  const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL
   try {
     const response = await axios.post(`${BASE_URL}/orders`, payload);
     return response.data;

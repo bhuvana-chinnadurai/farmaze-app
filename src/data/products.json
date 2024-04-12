@@ -1,0 +1,137 @@
+[
+  {
+      "id": "19f83d06-ae67-4a7c-82e1-f89e84a57f00",
+      "name": "Carrot",
+      "price": 1.5,
+      "description": "Fresh carrot",
+      "available_quantity": 100,
+      "category": "vegetable",
+      "unit": "kg"
+  },
+  {
+      "id": "d7a8e92b-b41e-42f2-8f71-2dd7a6767464",
+      "name": "Apple",
+      "price": 2,
+      "description": "Crisp apple",
+      "available_quantity": 50,
+      "category": "fruit",
+      "unit": "kg"
+  },
+  {
+      "id": "8ce4cfc2-9361-4b44-a42a-47d0da7f82ff",
+      "name": "Banana",
+      "price": 1.8,
+      "description": "Sweet banana",
+      "available_quantity": 60,
+      "category": "fruit",
+      "unit": "kg"
+  },
+  {
+      "id": "d85682c3-3cda-408e-9f16-392139cacc33",
+      "name": "Broccoli",
+      "price": 1.7,
+      "description": "Healthy broccoli",
+      "available_quantity": 80,
+      "category": "vegetable",
+      "unit": "bunch"
+  },
+  {
+      "id": "a3e4ccbf-6a89-4f65-a789-8695f1cbe1ee",
+      "name": "Orange",
+      "price": 2.2,
+      "description": "Juicy orange",
+      "available_quantity": 45,
+      "category": "fruit",
+      "unit": "kg"
+  },
+  {
+      "id": "5c6f3ea6-b303-42b5-9bea-6df63e4c3a4c",
+      "name": "Spinach",
+      "price": 1.6,
+      "description": "Fresh spinach",
+      "available_quantity": 90,
+      "category": "vegetable",
+      "unit": "bunch"
+  },
+  {
+      "id": "3ff44109-eec7-45d3-84f5-6841c733c712",
+      "name": "Potato",
+      "price": 1.4,
+      "description": "Starchy potato",
+      "available_quantity": 120,
+      "category": "vegetable",
+      "unit": "kg"
+  },
+  {
+      "id": "5e090a38-0525-47c3-8a09-4d0bfb5e6c63",
+      "name": "Grapes",
+      "price": 2.5,
+      "description": "Sweet grapes",
+      "available_quantity": 40,
+      "category": "fruit",
+      "unit": "kg"
+  },
+  {
+      "id": "60e9b9f4-b6bb-4587-8e63-1fc0d1040d1c",
+      "name": "Mango",
+      "price": 2.8,
+      "description": "Delicious mango",
+      "available_quantity": 35,
+      "category": "fruit",
+      "unit": "kg"
+  },
+  {
+      "id": "24e6b65f-079c-40e7-8c3a-1172e37268ef",
+      "name": "Onion",
+      "price": 1.3,
+      "description": "Cooking onion",
+      "available_quantity": 110,
+      "category": "vegetable",
+      "unit": "kg"
+  },
+  {
+      "id": "64c1cb1c-b8e7-4d2a-bf67-0fc5a261c264",
+      "name": "Cucumber",
+      "price": 1.8,
+      "description": "Crisp cucumber",
+      "available_quantity": 70,
+      "category": "vegetable",
+      "unit": "kg"
+  },
+  {
+      "id": "d42bebf3-29a0-4f6a-bf67-0fc5a261c264",
+      "name": "Strawberry",
+      "price": 2.3,
+      "description": "Sweet strawberry",
+      "available_quantity": 55,
+      "category": "fruit",
+      "unit": "kg"
+  },
+  {
+      "id": "2e4ac5dd-7f69-4a7c-9e41-e8e6070d9de7",
+      "name": "Avocado",
+      "price": 2.7,
+      "description": "Creamy avocado",
+      "available_quantity": 30,
+      "category": "fruit",
+      "unit": "kg"
+  },
+  {
+      "id": "d011c1d6-cb21-495a-b5d3-e5e7c678dcd8",
+      "name": "Cherry",
+      "price": 2.4,
+      "description": "Sweet cherry",
+      "available_quantity": 65,
+      "category": "fruit",
+      "unit": "kg"
+  },
+  {
+      "id": "a6a2954d-5d9f-45d6-a8a3-929df89929a8",
+      "name": "Olive Oil",
+      "price": 5,
+      "description": "Premium olive oil",
+      "available_quantity": 25,
+      "category": "oil",
+      "unit": "ml"
+  }
+]

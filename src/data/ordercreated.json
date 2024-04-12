@@ -1,0 +1,17 @@
+{
+  "id": "95c0ee63-a481-48ea-aaf1-fad6b63aa58f",
+  "client_id": "42ae47d6-3a90-4652-a28b-6cd9f3a139fc",
+  "products": [
+      {
+          "product_id": "19f83d06-ae67-4a7c-82e1-f89e84a57f00",
+          "quantity": 4
+      },
+      {
+          "product_id": "d85682c3-3cda-408e-9f16-392139cacc33",
+          "quantity": 4
+      }
+  ],
+  "total_price": 0,
+  "created_at": "2024-04-12T11:11:12.794541125Z",
+  "status": "ordered"
+}

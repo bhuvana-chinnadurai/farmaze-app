@@ -3,6 +3,7 @@
     "paths": {
       "@hoc/*": ["./src/hoc/*"],
       "@api/*": ["./src/api/*"],
+      "@mirage/*": ["./src/mirage/*"],
     }
   }
 }
