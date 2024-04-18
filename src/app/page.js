@@ -82,7 +82,7 @@ const Home = ({ isLoggedIn }) => {
 
   function convertOrderRequest(orderRequest, clientId) {
     const products = [];
-    
+
     // Iterate over each item in the original order
     Object.entries(orderRequest).forEach(([productId, productDetails]) => {
         const quantity = parseInt(productDetails.qty, 10);
@@ -91,7 +91,7 @@ const Home = ({ isLoggedIn }) => {
 
         // Add product to the products list with new format
         products.push({
-            product_id: productId,
+            id: productId,
             quantity: quantity
         });
 
