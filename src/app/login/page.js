@@ -24,7 +24,8 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const token = await postLogin(userName, password);
+      const {token} = await postLogin(userName, password);
+      console.log("token is",token)
       sessionStorage.setItem('token', token); // Consider using HTTP-only cookies instead
       router.push('/'); // Navigate to home on successful login
     } catch (error) {
