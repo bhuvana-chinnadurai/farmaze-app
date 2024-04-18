@@ -10,13 +10,14 @@ const UserDisplay = (username) => {
       sessionStorage.removeItem('userName'); // Also clear the username if stored
       router.push('/login'); // Redirect to the login page
   };
-
+  
     return (
       <div>
       {username ? (
           <div>
               Welcome, {username}!   
               <button onClick={handleLogout}>Logout</button>
+              <button onClick={listOrders}>List Orders</button>
           </div>
       ) : (
           <p></p>
