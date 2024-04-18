@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import withHeader from "@hoc/withHeader";
 import { Input } from "antd";
+import { postLogin } from '@api/auth.api';
 
 import {
   Container,
@@ -21,11 +22,15 @@ const Login = () => {
 
   const handleInputChange = setter => ev => setter(ev.target.value)
 
-  const handleLogin = () => {
-    // Validate username and password
-    localStorage.setItem("app-token", 1234);
-    router.push("/");
-  }
+  const handleLogin = async () => {
+    try {
+      const data = await postLogin(userName, password);
+      localStorage.setItem('app-token', data.token); // Consider using HTTP-only cookies instead
+      router.push('/'); // Navigate to home on successful login
+    } catch (error) {
+      alert(error.message); // Show error message from API
+    }
+  };
 
   return (
     <Container>
