@@ -4,19 +4,10 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
+import withHeader from "@hoc/withHeader";
 
-const UserDisplay = () => {
-  const [username, setUsername] = useState('');
+const UserDisplay = (username) => {
   const router = useRouter();
-
-  useEffect(() => {
-        const token = sessionStorage.getItem('token'); // Access sessionStorage safely here
-        if (token) {
-            const decoded = jwtDecode(token);
-            setUsername(decoded.username || 'User');
-        }
-    }, []);
-
     const handleLogout = () => {
       sessionStorage.removeItem('token'); // Clear the token from sessionStorage
       sessionStorage.removeItem('userName'); // Also clear the username if stored
@@ -31,11 +22,11 @@ const UserDisplay = () => {
               <button onClick={handleLogout}>Logout</button>
           </div>
       ) : (
-          <p>Please log in.</p>
+          <p></p>
       )}
   </div>
     );
   
 };
 
-export default UserDisplay;
+export default withHeader(UserDisplay);

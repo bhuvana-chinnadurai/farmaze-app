@@ -1,7 +1,8 @@
 import React from 'react';
 import { Container, Title, Summary, SummaryTitle, SummaryItem, SummaryLabel, SummaryValue } from './thankyou.styled';
+import withHeader from "@hoc/withHeader";
 
-const ThankYouSummary = ({ orderSummary }) => {
+const ThankYouSummary = ({userName,orderSummary }) => {
   const { client_id, status, created_at, products = [] } = orderSummary;
 
   const handlePrint = () => {
@@ -10,7 +11,7 @@ const ThankYouSummary = ({ orderSummary }) => {
 
   return (
     <Container>
-      <Title>Thank You for Your Order!</Title>
+      <Title>Hello {userName} Thank You for Your Order!</Title>
       <button onClick={handlePrint}>Print Invoice</button>
       <Summary>
         <SummaryTitle>Client ID</SummaryTitle>
@@ -47,4 +48,4 @@ const ThankYouSummary = ({ orderSummary }) => {
   );
 };
 
-export default ThankYouSummary;
+export default withHeader(ThankYouSummary);
