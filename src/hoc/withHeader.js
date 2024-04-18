@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import UserDisplay from "@app/UserDisplay";
+import UserDisplay from "../app/UserDisplay/UserDisplay";
 
 const withHeader = ComponentToRender => (props) => {
   const [isLoggedIn, setLoggedInStatus] = useState(false);
