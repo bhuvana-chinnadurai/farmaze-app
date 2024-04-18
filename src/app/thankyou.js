@@ -1,9 +1,11 @@
 import React from 'react';
 import { Container, Title, Summary, SummaryTitle, SummaryItem, SummaryLabel, SummaryValue } from './thankyou.styled';
-import withHeader from "@hoc/withHeader";
 
-const ThankYouSummary = ({userName,orderSummary }) => {
-  const { client_id, status, created_at, products = [] } = orderSummary;
+const ThankYouSummary = ({  orderSummary,username, }) => {
+  const {created_at, products = [] } = orderSummary;
+
+  // Format the creation date
+  const formattedDate = new Date(created_at).toLocaleString();
 
   const handlePrint = () => {
     window.print();
@@ -11,14 +13,8 @@ const ThankYouSummary = ({userName,orderSummary }) => {
 
   return (
     <Container>
-      <Title>Hello {userName} Thank You for Your Order!</Title>
-      <button onClick={handlePrint}>Print Invoice</button>
-      <Summary>
-        <SummaryTitle>Client ID</SummaryTitle>
-        <SummaryItem>
-          <SummaryValue>{client_id}</SummaryValue>
-        </SummaryItem>
-      </Summary>
+      <Title>Hello {username}, Thank You for Your Order! Your order is placed successfully at {formattedDate}</Title>
+      <button onClick={handlePrint} style={{ margin: '10px 0', padding: '8px 16px', cursor: 'pointer' }}>Print Invoice</button>
       <Summary>
         <SummaryTitle>Products</SummaryTitle>
         <ul>
@@ -32,20 +28,8 @@ const ThankYouSummary = ({userName,orderSummary }) => {
           ))}
         </ul>
       </Summary>
-      <Summary>
-        <SummaryTitle>Status</SummaryTitle>
-        <SummaryItem>
-          <SummaryValue>{status}</SummaryValue>
-        </SummaryItem>
-      </Summary>
-      <Summary>
-        <SummaryTitle>Created At</SummaryTitle>
-        <SummaryItem>
-          <SummaryValue>{new Date(created_at).toLocaleString()}</SummaryValue>
-        </SummaryItem>
-      </Summary>
     </Container>
   );
 };
 
-export default withHeader(ThankYouSummary);
+export default ThankYouSummary;

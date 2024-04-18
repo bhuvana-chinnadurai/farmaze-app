@@ -29,7 +29,7 @@ import {
   FooterButton,
 } from "./page.styled";
 
-const Home = ({ isLoggedIn, userName }) => {
+const Home = ({ isLoggedIn, username }) => {
   const [productList, setProductList] = useState([]);
   const [orderRequest, setOrderRequest] = useState({});
   const [orderSummary, setOrderSummary] = useState({});
@@ -235,7 +235,7 @@ const Home = ({ isLoggedIn, userName }) => {
     </>
     )}
     {isOrderPlaced && (
-        <ThankYouSummary userName={userName} orderSummary={orderSummary} />
+        <ThankYouSummary orderSummary={orderSummary} />
       )}
     </>
   );
