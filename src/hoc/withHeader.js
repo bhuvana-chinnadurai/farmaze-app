@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import LogoutButton from "@app/logout/page";
+import UserDisplay from "@app/UserDisplay/UserDisplay";
 
 const withHeader = ComponentToRender => (props) => {
   const [isLoggedIn, setLoggedInStatus] = useState(false);
@@ -26,7 +26,7 @@ const withHeader = ComponentToRender => (props) => {
           <Link href="/"><Image src="/logo.png" width={140} height={44} alt="Farmaze Logo" /></Link>
         </div>
         <div className='header-right'>
-        <LogoutButton />
+        <UserDisplay />
           {/* <div><Image src="/contact.png" width={32} height={32} alt="Contact Support" /></div> */}
           {/* <AntdButton height={48} type="primary">Login</AntdButton> */}
         </div>
