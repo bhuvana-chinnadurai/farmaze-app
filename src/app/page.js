@@ -82,8 +82,7 @@ const Home = ({ isLoggedIn }) => {
 
   function convertOrderRequest(orderRequest, clientId) {
     const products = [];
-    let total_price = 0;
-
+    
     // Iterate over each item in the original order
     Object.entries(orderRequest).forEach(([productId, productDetails]) => {
         const quantity = parseInt(productDetails.qty, 10);
@@ -97,14 +96,12 @@ const Home = ({ isLoggedIn }) => {
         });
 
         // Accumulate total price
-        total_price += subtotal;
     });
 
     // Return the new order format
     return {
         client_id: clientId,
         products: products,
-        total_price: total_price.toFixed(2)  // Ensure the total price is a string with two decimal places
     };
 }
 
