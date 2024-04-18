@@ -1,10 +1,7 @@
 // components/UserDisplay.js
 "use client"
 
-import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
-import withHeader from "@hoc/withHeader";
 
 const UserDisplay = (username) => {
   const router = useRouter();
@@ -29,4 +26,4 @@ const UserDisplay = (username) => {
   
 };
 
-export default withHeader(UserDisplay);
+export default UserDisplay;

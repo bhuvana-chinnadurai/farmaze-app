@@ -13,7 +13,7 @@ const ThankYouSummary = ({  orderSummary,username, }) => {
 
   return (
     <Container>
-      <Title>Hello {username}, Thank You for Your Order! Your order is placed successfully at {formattedDate}</Title>
+      <p>Hello {username},Your order is placed successfully at {formattedDate}</p>
       <button onClick={handlePrint} style={{ margin: '10px 0', padding: '8px 16px', cursor: 'pointer' }}>Print Invoice</button>
       <Summary>
         <SummaryTitle>Products</SummaryTitle>
