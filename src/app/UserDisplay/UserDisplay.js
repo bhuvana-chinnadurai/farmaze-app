@@ -1,9 +1,13 @@
 // components/UserDisplay.js
+"use client"
+
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
 
 const UserDisplay = () => {
   const [username, setUsername] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
         const token = sessionStorage.getItem('token'); // Access sessionStorage safely here
@@ -23,7 +27,7 @@ const UserDisplay = () => {
       <div>
       {username ? (
           <div>
-              Welcome, {username}!
+              Welcome, {username}!   
               <button onClick={handleLogout}>Logout</button>
           </div>
       ) : (
