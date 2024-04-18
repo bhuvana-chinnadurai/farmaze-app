@@ -5,7 +5,7 @@ import { publicRuntimeConfig } from 'next.config.js';
 export const postLogin = async (username, password) => {
   const BASE_URL = publicRuntimeConfig.REACT_APP_API_BASE_URL
   try {
-    const response = await axios.post(`${BASE_URL}/auth/login`, {
+    const response = await axios.post(`${BASE_URL}/login`, {
       username,
       password,
     });
