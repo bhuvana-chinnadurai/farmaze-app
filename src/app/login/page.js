@@ -23,9 +23,10 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const { token } = await postLogin(username, password);
+      const { token } = await postLogin(userName, password);
       if (response.ok) {
-        sessionStorage.setItem('token', data.token);  // Use sessionStorage for more security compared to localStorage
+        console.log("token is received ",token)
+        sessionStorage.setItem('token', token);  // Use sessionStorage for more security compared to localStorage
 
         // Assume the HTTP-only cookie is automatically set by the server on successful login
         router.push('/'); // Navigate to home on successful login
