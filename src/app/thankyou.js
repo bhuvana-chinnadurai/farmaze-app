@@ -1,23 +1,21 @@
 import React from 'react';
-import { Container, Title, Summary, SummaryTitle, SummaryItem, SummaryLabel, SummaryValue } from './thankyou.styled'; // Importing styled-components for styling
+import { Container, Title, Summary, SummaryTitle, SummaryItem, SummaryLabel, SummaryValue } from './thankyou.styled';
 
-const ThankYouSummary = ({ orderSummary}) => {
+const ThankYouSummary = ({ orderSummary }) => {
+  const { client_id, status, created_at, products = [] } = orderSummary;
 
-  console.log("orderSummary",orderSummary)
-// Extract client ID from order information
-const clientId = orderSummary.client_id;
-// Extract status and created at date from order information
-const { status, created_at } = orderSummary;
-// Extract products array from order information
-const products = orderSummary.products || [];
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <Container>
       <Title>Thank You for Your Order!</Title>
+      <button onClick={handlePrint}>Print Invoice</button>
       <Summary>
         <SummaryTitle>Client ID</SummaryTitle>
         <SummaryItem>
-          <SummaryValue>{clientId}</SummaryValue>
+          <SummaryValue>{client_id}</SummaryValue>
         </SummaryItem>
       </Summary>
       <Summary>
@@ -26,13 +24,13 @@ const products = orderSummary.products || [];
           {products.map((product) => (
             <li key={product.product_id}>
               <SummaryItem>
-                <SummaryLabel>{product.name}:</SummaryLabel> <SummaryValue>{product.quantity}</SummaryValue>
+                <SummaryLabel>{product.name}:</SummaryLabel>
+                <SummaryValue>{product.quantity}</SummaryValue>
               </SummaryItem>
             </li>
           ))}
         </ul>
       </Summary>
-      
       <Summary>
         <SummaryTitle>Status</SummaryTitle>
         <SummaryItem>

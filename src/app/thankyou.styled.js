@@ -1,40 +1,52 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
+// Existing styles...
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 24px;
+  padding: 20px;
+  @media print {
+    color: black;
+    background: white;
+    border: none;
+    box-shadow: none;
+  }
 `;
 
 export const Title = styled.h1`
-  font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 16px;
+  @media print {
+    font-size: 20px;
+  }
 `;
 
 export const Summary = styled.div`
-  border: 1px solid #e8e8e8;
-  padding: 16px;
-  border-radius: 8px;
-  width: 50%;
-  max-width: 600px;
+  margin-bottom: 20px;
+  @media print {
+    margin-bottom: 10px;
+  }
 `;
 
 export const SummaryTitle = styled.h2`
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 16px;
+  @media print {
+    font-size: 16px;
+  }
 `;
 
 export const SummaryItem = styled.div`
-  margin-bottom: 8px;
+  @media print {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+  }
 `;
 
 export const SummaryLabel = styled.span`
   font-weight: bold;
+  @media print {
+    font-weight: normal;
+  }
 `;
 
 export const SummaryValue = styled.span`
-  margin-left: 8px;
+  @media print {
+    font-weight: normal;
+  }
 `;
