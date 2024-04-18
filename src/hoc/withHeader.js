@@ -10,7 +10,7 @@ const withHeader = ComponentToRender => (props) => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("app-token");
+    const token = sessionStorage.getItem("token");
     if (!token && pathName !== "/login") router.push("/login");
     else if (!!token) {
       setLoggedInStatus(true);
