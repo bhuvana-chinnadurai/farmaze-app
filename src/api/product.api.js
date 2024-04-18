@@ -20,6 +20,7 @@ export const createOrder = async (payload) => {
   const token = sessionStorage.getItem('token'); // or localStorage.getItem('token');
 
   try {
+    console.log("token ",token)
     const response = await axios.post(`${BASE_URL}/orders`, payload,{ 
       headers: {
       'Authorization': `Bearer ${token}`, // Set the Authorization header
